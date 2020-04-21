@@ -61,3 +61,18 @@
     ```
     git log --no-merges kochiraninai_branch..kochiraniaru_branch
     ```
+# rsyncコマンド
+
+- ローカルにリモートのファイルをダウンロードして同期
+    
+  - 上書き同期
+    ```
+    #テスト実行プション
+    rsync -ahv --dry-run -e "ssh -p 2222 -i /home/foo/.ssh/private.rsa" username@hostname:/var/www/html/idoumoto/ /var/www/html/idousaki/
+    ```
+  
+  - 移動元にないファイルは削除
+  
+    ```
+    rsync -ahv --dry-run --delete --username@hostname:/var/www/html/idoumoto/ /var/www/html/idousaki/
+    ```
