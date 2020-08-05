@@ -76,3 +76,40 @@
     ```
     rsync -ahv --dry-run --delete --username@hostname:/var/www/html/idoumoto/ /var/www/html/idousaki/
     ```
+# MySQL
+
+  - 新規ユーザ作成
+    - どこからでも接続可
+      ```
+      CREATE USER 'develop'@'%' IDENTIFIED BY 'password';
+      ```
+    - ローカルからのみ接続可
+      ```
+      CREATE USER 'develop'@'localhost' IDENTIFIED BY 'password';
+      ```
+  - 権限付与
+    - 全権限
+      ```
+      GRANT ALL ON *.* TO 'develop'@'localhost';
+      FLUSH PRIVILEGES;
+      ```
+    - 全DB＆テーブルに対して参照のみ権限
+      ```
+      GRANT SELECT ON *.* TO 'develop'@'localhost';
+      FLUSH PRIVILEGES;
+      ``` 
+    - 特定DBの全テーブルに対して参照のみ権限
+      ```
+      GRANT SELECT ON sample_db.* TO 'develop'@'localhost';
+      FLUSH PRIVILEGES;
+      ``` 
+    - 一般的なアプリで利用する権限(マイグレーション実行する場合)
+      ```
+      GRANT SELECT,UPDATE,DELETE,INSERT,ALTER,CREATE,DROP,REFERENCES,INDEX,LOCK TABLES ON *.* TO 'develop'@'localhost';
+      FLUSH PRIVILEGES;
+      ``` 
+    - 一般的なアプリで利用する権限(マイグレーション実行しない場合)
+      ```
+      GRANT SELECT,UPDATE,DELETE,INSERT,LOCK TABLES ON *.* TO 'develop'@'localhost';
+      FLUSH PRIVILEGES;
+      ``` 
