@@ -113,3 +113,34 @@
       GRANT SELECT,UPDATE,DELETE,INSERT,LOCK TABLES ON *.* TO 'develop'@'localhost';
       FLUSH PRIVILEGES;
       ``` 
+# ファイル操作系コマンドを確認しながら実行
+間違うと甚大な被害が出るコマンドや、大量処理さえるコマンドを、確認しながら安全に実行する
+ - ディレクトリ複製  
+   権限も同一にし再帰的にコピー。`cp -ra /hoge/*`でコピーするとドットで始まるファイルが対象外のための回避策。
+   ```
+   pwd
+   mkdir to-directory
+   cp -ra /hogehoge/from-directory/. to-directory
+   ```
+   
+ - 削除ファイルを確認してから、ディレクトリを再帰的的削除
+   ```
+   pwd
+   ls -lda /hoge/all-delete-directory/*
+   rm -rf  /hoge/all-delete-directory/*
+   ``` 
+ - 圧縮と解凍
+ 余分なディレクトリを作らず、アーカイブしたディレクトリと同構成で展開する
+   ```
+   #圧縮
+   cd  /hoge/archive-dir
+   ls
+   tar -zcvf ~/hogehoge.tar.gz ./
+   
+   #解凍
+   pwd
+   mkdir open-dir
+   cd open-dir
+   ls
+   tar -zxvf ~/hogehoge.tar.gz -C ./
+   ``` 

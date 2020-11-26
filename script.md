@@ -10,7 +10,7 @@
 period=7
 
 #保存ファイル名
-filename=`date +%y%m%d`
+filename=`date +%Y%m%d%H%M%S`
 
 ###################
 #転送元設定
@@ -45,14 +45,17 @@ rsapath='~/.ssh/id_rsa'
 ###################
 
 #バックアップ
-mysqldump -h $dbhost -u $dbuser -p$dbpass | gzip > $dirpath/$filename.sql.gz
+mysqldump --single-transaction --quick -h $dbhost -u $dbuser -p$dbpass $dbname | gzip > $dirpath/$filename.sql.gz
 
 #期限切れファイル削除
-oldfile=`date --date "$period days ago" +%y%m%d`
-rm -f $dirpath/$oldfile.sql.gz
+oldfile=`date --date "$period days ago" +%Y%m%d`
+rm -f $dirpath/$oldfile*.sql.gz
 
 #別サーバへコピー
-rsync -av -e "ssh -i $rsapath" --delete $dirpath/ $remoteuser@$remotehost:$remotedir
+rsync -av -e "ssh -i $rsapath" $dirpath/$filename.sql.gz $remoteuser@$remotehost:$remotedir
+
+#別サーバの期限切れファイル削除
+ssh -i $rsapath $remoteuser@$remotehost rm -f $remotedir/$oldfile*.sql.gz
 
 ```
 
